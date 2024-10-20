@@ -456,3 +456,5 @@ class AkunGame {
         return harga; // Getter untuk harga
     }
 }
+
+// tess andre
