@@ -7,28 +7,31 @@ public class marketplace_akungame {
     private static List<Pengguna> daftarPengguna = new ArrayList<>();
     private static List<AkunGame> daftarAkunGame = new ArrayList<>();
     private static List<String> notifikasi = new ArrayList<>();
+    private static List<Transaksi> riwayatTransaksi = new ArrayList<>();
+    private static List<RatingUlasan> daftarRatingUlasan = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
     private static Random random = new Random();
+    private static LoyaltyPoints loyaltyPoints = new LoyaltyPoints();
+    private static double saldoPengguna = 100000;
 
     public static void main(String[] args) {
-        // Menambahkan beberapa akun game ke dalam daftar dengan harga
-        daftarAkunGame.add(new AkunGame("12345", "ProGamer", 80, "60+ hero unlocked, termasuk Esmeralda, Lancelot", "5 skin epic, 10 skin rare", "Tersedia untuk dijual", 150000));
-        daftarAkunGame.add(new AkunGame("23456", "CasualPlayer", 50, "30 hero unlocked, termasuk Layla dan Johnson", "2 skin rare", "Tersedia untuk dijual", 250000));
-        daftarAkunGame.add(new AkunGame("34567", "StrategyKing", 70, "40 hero unlocked, termasuk Kagura dan Franco", "3 skin epic, 5 skin rare", "Tersedia untuk dijual", 350000));
-        daftarAkunGame.add(new AkunGame("45678", "NoobMaster", 30, "10 hero unlocked, termasuk Miya dan Akai", "1 skin rare", "Tersedia untuk dijual", 450000));
-        daftarAkunGame.add(new AkunGame("56789", "RushHour", 90, "70+ hero unlocked, termasuk Harith dan Aldous", "7 skin epic, 12 skin rare", "Tersedia untuk dijual", 650000));
-        daftarAkunGame.add(new AkunGame("67890", "TeamPlayer", 60, "50 hero unlocked, termasuk Pharsa dan Leomord", "4 skin epic, 8 skin rare", "Tersedia untuk dijual", 550000));
-        daftarAkunGame.add(new AkunGame("78901", "EliteHunter", 75, "55 hero unlocked, termasuk Gusion dan Angela", "6 skin epic, 9 skin rare", "Tersedia untuk dijual", 750000));
-        daftarAkunGame.add(new AkunGame("89012", "SoloQMaster", 40, "25 hero unlocked, termasuk Karrie dan Chou", "2 skin rare", "Tersedia untuk dijual", 300000));
-        daftarAkunGame.add(new AkunGame("90123", "SupportQueen", 65, "45 hero unlocked, termasuk Nana dan Estes", "3 skin epic, 6 skin rare", "Tersedia untuk dijual", 400000));
-        daftarAkunGame.add(new AkunGame("01234", "FastLearner", 55, "35 hero unlocked, termasuk Fanny dan Saber", "1 skin rare", "Tersedia untuk dijual", 350000));
+        // Menambahkan beberapa akun game ke dalam daftar
+        daftarAkunGame.add(new AkunGame("12345", "ProGamer", 80, "60+ hero unlocked", "5 skin epic, 10 skin rare", "Tersedia untuk dijual", 150000));
+        daftarAkunGame.add(new AkunGame("23456", "CasualPlayer", 50, "30 hero unlocked", "2 skin rare", "Tersedia untuk dijual", 250000));
+        daftarAkunGame.add(new AkunGame("34567", "StrategyKing", 70, "40 hero unlocked", "3 skin epic, 5 skin rare", "Tersedia untuk dijual", 350000));
+        daftarAkunGame.add(new AkunGame("45678", "NoobMaster", 30, "10 hero unlocked", "1 skin rare", "Tersedia untuk dijual", 450000));
+        daftarAkunGame.add(new AkunGame("56789", "RushHour", 90, "70+ hero unlocked", "7 skin epic, 12 skin rare", "Tersedia untuk dijual", 650000));
+        daftarAkunGame.add(new AkunGame("67890", "TeamPlayer", 60, "50 hero unlocked", "4 skin epic, 8 skin rare", "Tersedia untuk dijual", 550000));
+        daftarAkunGame.add(new AkunGame("78901", "EliteHunter", 75, "55 hero unlocked", "6 skin epic, 9 skin rare", "Tersedia untuk dijual", 750000));
+        daftarAkunGame.add(new AkunGame("89012", "SoloQMaster", 40, "25 hero unlocked", "2 skin rare", "Tersedia untuk dijual", 300000));
+        daftarAkunGame.add(new AkunGame("90123", "SupportQueen", 65, "45 hero unlocked", "3 skin epic, 6 skin rare", "Tersedia untuk dijual", 400000));
+        daftarAkunGame.add(new AkunGame("01234", "FastLearner", 55, "35 hero unlocked", "1 skin rare", "Tersedia untuk dijual", 350000));
 
         while (true) {
             tampilkanMenu();
         }
     }
 
-    // Menu utama
     public static void tampilkanMenu() {
         System.out.println("\n=== Menu Utama ===");
         System.out.println("1. Registrasi");
@@ -36,7 +39,7 @@ public class marketplace_akungame {
         System.out.println("3. Keluar");
         System.out.print("Pilih opsi: ");
         int pilihan = scanner.nextInt();
-        scanner.nextLine(); // membersihkan newline
+        scanner.nextLine();
 
         switch (pilihan) {
             case 1:
@@ -46,14 +49,13 @@ public class marketplace_akungame {
                 tampilkanMenuLogin();
                 break;
             case 3:
-                System.exit(0); // Keluar dari program
+                System.exit(0);
                 break;
             default:
                 System.out.println("Opsi tidak valid. Silakan coba lagi.");
         }
     }
 
-    // Menu Registrasi
     public static void tampilkanMenuRegistrasi() {
         System.out.println("\n=== Registrasi Pengguna ===");
         String nama = input("Nama");
@@ -68,7 +70,6 @@ public class marketplace_akungame {
         }
     }
 
-    // Menu Login
     public static void tampilkanMenuLogin() {
         System.out.println("\n=== Login Pengguna ===");
         String email = input("Email");
@@ -76,13 +77,12 @@ public class marketplace_akungame {
 
         if (autentikasiPengguna(email, kataSandi)) {
             System.out.println("Login berhasil! Selamat datang, " + getNamaPengguna(email) + ".");
-            tampilkanMenuProfil(getNamaPengguna(email)); // Menampilkan menu profil setelah login
+            tampilkanMenuProfil(getNamaPengguna(email));
         } else {
             System.out.println("Login gagal. Email atau password salah.");
         }
     }
 
-    // Menu Profil Pengguna
     public static void tampilkanMenuProfil(String namaPengguna) {
         while (true) {
             System.out.println("\n=== Menu Profil ===");
@@ -92,10 +92,14 @@ public class marketplace_akungame {
             System.out.println("4. Cari Akun Game");
             System.out.println("5. Beli Akun Game");
             System.out.println("6. Lihat Notifikasi");
-            System.out.println("7. Logout");
+            System.out.println("7. Tampilkan Loyalty Points");
+            System.out.println("8. Verifikasi Akun Game");
+            System.out.println("9. Riwayat Transaksi");
+            System.out.println("10. Rating dan Ulasan");
+            System.out.println("11. Logout");
             System.out.print("Pilih opsi: ");
             int pilihan = scanner.nextInt();
-            scanner.nextLine(); // membersihkan newline
+            scanner.nextLine();
 
             switch (pilihan) {
                 case 1:
@@ -117,6 +121,18 @@ public class marketplace_akungame {
                     tampilkanNotifikasi();
                     break;
                 case 7:
+                    tampilkanLoyaltyPoints();
+                    break;
+                case 8:
+                    verifikasiAkunGame(namaPengguna);
+                    break;
+                case 9:
+                    tampilkanRiwayatTransaksi();
+                    break;
+                case 10:
+                    tampilkanRatingDanUlasan(namaPengguna);
+                    break;
+                case 11:
                     System.out.println("Anda telah logout.");
                     return;
                 default:
@@ -125,7 +141,6 @@ public class marketplace_akungame {
         }
     }
 
-    // Update Profil
     public static void updateProfil(String namaPengguna) {
         System.out.println("\n=== Update Profil ===");
         for (Pengguna pengguna : daftarPengguna) {
@@ -145,191 +160,167 @@ public class marketplace_akungame {
         }
     }
 
-    // Top Up Akun
     public static void topUpAkun(String namaPengguna) {
         System.out.println("\n=== Top Up Akun ===");
         System.out.print("Masukkan jumlah yang ingin ditambahkan ke saldo: ");
         double jumlah = scanner.nextDouble();
-        scanner.nextLine(); // membersihkan newline
+        scanner.nextLine();
 
         System.out.println("=== Metode Pembayaran ===");
-        System.out.println("1. rekening bca : 9898776557");
-        System.out.println("2. 0812609878");
-        System.out.println("3. 0812609878");
+        System.out.println("1. Rekening BCA : 9898776557");
+        System.out.println("2. 0812609878 (E-Wallet)");
+        System.out.println("3. Tunai");
         System.out.print("Pilih metode pembayaran: ");
         int metodePembayaran = scanner.nextInt();
-        scanner.nextLine(); // membersihkan newline
+        scanner.nextLine();
 
-        switch (metodePembayaran) {
-            case 1: // Transfer Bank
-                String nomorRekening = input("Masukkan nomor rekening:");
-                System.out.println("Anda memilih Transfer Bank dengan nomor rekening: " + nomorRekening);
-                System.out.println("Silakan tunggu, sedang memproses transfer...");
-                // Simulasi waktu tunggu untuk memproses transfer
-                delay();
-                tambahSaldoPengguna(namaPengguna, jumlah);
-                return;
-            case 2: // Pulsa
-                String nomorHandphone = input("Masukkan nomor handphone penjual:");
-                System.out.println("Anda memilih Pulsa dengan nomor handphone: " + nomorHandphone);
-                System.out.println("Silakan tunggu, sedang memproses pulsa...");
-                // Simulasi waktu tunggu untuk memproses pulsa
-                delay();
-                tambahSaldoPengguna(namaPengguna, jumlah);
-                return;
-            case 3: // E-Wallet
-                String nomorDana = input("Masukkan nomor Dana (sesuai dengan nomor handphone):");
-                System.out.println("Anda memilih E-Wallet dengan nomor Dana: " + nomorDana);
-                System.out.println("Silakan tunggu, sedang memproses E-Wallet...");
-                // Simulasi waktu tunggu untuk memproses E-Wallet
-                delay();
-                tambahSaldoPengguna(namaPengguna, jumlah);
-                return;
-            default:
-                System.out.println("Metode pembayaran tidak valid.");
-                return; // Kembali ke menu
+        if (metodePembayaran == 1 || metodePembayaran == 2 || metodePembayaran == 3) {
+            System.out.println("Top up berhasil. Saldo Anda kini bertambah sebesar: " + jumlah);
+            notifikasi.add("Top up berhasil sebesar: " + jumlah + " (Metode Pembayaran: " + metodePembayaran + ")");
+            loyaltyPoints.tambahPoints(10); // Tambah 10 poin tetap
+            saldoPengguna += jumlah;
+            riwayatTransaksi.add(new Transaksi(namaPengguna, "Top Up", jumlah));
+        } else {
+            System.out.println("Metode pembayaran tidak valid.");
         }
     }
 
-    // Menambahkan saldo ke pengguna
-    public static void tambahSaldoPengguna(String namaPengguna, double jumlah) {
-        for (Pengguna pengguna : daftarPengguna) {
-            if (pengguna.getNama().equals(namaPengguna)) {
-                pengguna.topUp(jumlah);
-                System.out.println("Top Up berhasil! Saldo Anda sekarang: " + pengguna.getSaldo());
-                return;
-            }
-        }
-    }
-
-    // Menampilkan daftar akun game
     public static void tampilkanDaftarAkunGame() {
         System.out.println("\n=== Daftar Akun Game ===");
-        System.out.println("--------------------------------------------------------------------------------");
-        System.out.printf("%-10s %-15s %-10s %-50s %-30s %-25s %-10s%n", "ID Akun", "Nama Pengguna", "Level", "Hero", "Skin", "Status", "Harga");
-        System.out.println("--------------------------------------------------------------------------------");
         for (AkunGame akun : daftarAkunGame) {
-            System.out.printf("%-10s %-15s %-10d %-50s %-30s %-25s %-10.2f%n",
-                    akun.getIdAkun(),
-                    akun.getNamaPengguna(),
-                    akun.getLevel(),
-                    akun.getHero(),
-                    akun.getSkin(),
-                    akun.getStatus(),
-                    akun.getHarga()); // Tampilkan harga
+            System.out.printf("ID: %s, Nama: %s, Level: %d, Harga: %.2f, Status: %s%n",
+                    akun.getIdAkun(), akun.getNamaPengguna(), akun.getLevel(), akun.getHarga(), akun.getStatus());
         }
-        System.out.println("--------------------------------------------------------------------------------");
     }
 
-    // Mencari akun game
     public static void cariAkunGame() {
-        System.out.print("Masukkan nama akun game yang ingin dicari: ");
-        String namaAkun = scanner.nextLine();
-        boolean ditemukan = false;
-
-        for (AkunGame akun : daftarAkunGame) {
-            if (akun.getNamaPengguna().equalsIgnoreCase(namaAkun)) {
-                System.out.println("Akun game ditemukan!");
-                System.out.printf("ID Akun: %s, Level: %d, Hero: %s, Skin: %s, Status: %s, Harga: %.2f%n",
-                        akun.getIdAkun(), akun.getLevel(), akun.getHero(), akun.getSkin(), akun.getStatus(), akun.getHarga());
-                ditemukan = true;
-                break;
-            }
-        }
-        if (!ditemukan) {
-            System.out.println("Akun game tidak ditemukan.");
+        System.out.print("Masukkan ID Akun Game yang ingin dicari: ");
+        String idAkun = scanner.nextLine();
+        AkunGame akun = cariAkun(idAkun);
+        if (akun != null) {
+            System.out.printf("ID: %s, Nama: %s, Level: %d, Harga: %.2f, Status: %s%n",
+                    akun.getIdAkun(), akun.getNamaPengguna(), akun.getLevel(), akun.getHarga(), akun.getStatus());
+        } else {
+            System.out.println("Akun Game tidak ditemukan.");
         }
     }
 
-    // Membeli akun game
     public static void beliAkunGame(String namaPengguna) {
-        System.out.print("Masukkan nama akun game yang ingin dibeli: ");
-        String namaAkun = scanner.nextLine();
-        boolean ditemukan = false;
-
-        for (AkunGame akun : daftarAkunGame) {
-            if (akun.getNamaPengguna().equalsIgnoreCase(namaAkun) && akun.getStatus().equals("Tersedia untuk dijual")) {
-                System.out.println("Anda telah memilih akun: " + akun.getNamaPengguna());
-                System.out.printf("ID Akun: %s, Level: %d, Hero: %s, Skin: %s, Harga: %.2f%n", akun.getIdAkun(), akun.getLevel(), akun.getHero(), akun.getSkin(), akun.getHarga());
-
-                // Metode Pembayaran
+        System.out.print("Masukkan ID Akun Game yang ingin dibeli: ");
+        String idAkun = scanner.nextLine();
+        AkunGame akun = cariAkun(idAkun);
+        if (akun != null) {
+            if (saldoPengguna >= akun.getHarga()) {
                 System.out.println("=== Metode Pembayaran ===");
-                System.out.println("Silakan transfer ke nomor rekening BCA: 12786278690");
+                System.out.println("1. Rekening BCA : 9898776557");
+                System.out.println("2. 0812609878 (E-Wallet)");
+                System.out.println("3. Tunai");
+                System.out.print("Pilih metode pembayaran: ");
+                int metodePembayaran = scanner.nextInt();
+                scanner.nextLine();
 
-                // Delay 4 detik
-                delay(4000);
+                // Simulate payment processing
+                System.out.println("Memproses pembayaran...");
+                try {
+                    Thread.sleep(4000); // Delay of 4 seconds
+                } catch (InterruptedException e) {
+                    System.out.println("Terjadi kesalahan saat memproses pembayaran.");
+                    return;
+                }
 
-                // Pembayaran
-                System.out.println("Pembayaran sedang diproses...");
-                delay(); // Simulasi waktu tunggu
+                // Confirm payment after delay
+                saldoPengguna -= akun.getHarga();
+                notifikasi.add("Anda telah membeli Akun Game: " + akun.getNamaPengguna());
+                riwayatTransaksi.add(new Transaksi(namaPengguna, "Beli Akun", akun.getHarga()));
+                loyaltyPoints.tambahPoints(10); // Tambah 10 poin tetap
 
+                // New Messages
                 System.out.println("Pembayaran berhasil. Informasi akun akan segera dikirim.");
-                // Pengiriman Informasi Akun
                 System.out.println("Mengirim informasi akun...");
-                delay(); // Simulasi waktu tunggu
-
-                System.out.println("Informasi akun yang berhasil dibeli:");
-                System.out.println("Username: " + akun.getNamaPengguna());
-                System.out.println("Password: [DIKIRIM KE EMAIL ANDA]"); // Simulasi pengiriman password
-                System.out.println("Email terkait: [DIKIRIM KE EMAIL ANDA]"); // Simulasi pengiriman email
-                System.out.println("Kode verifikasi atau informasi keamanan tambahan: [DIKIRIM KE EMAIL ANDA]"); // Simulasi pengiriman kode verifikasi
-
-                // Konfirmasi Transaksi
+                System.out.printf("Username: %s%n", akun.getNamaPengguna());
+                System.out.println("Password: [DIKIRIM KE EMAIL ANDA]");
+                System.out.println("Email terkait: [DIKIRIM KE EMAIL ANDA]");
+                System.out.println("Kode verifikasi atau informasi keamanan tambahan: [DIKIRIM KE EMAIL ANDA]");
                 System.out.println("Konfirmasi transaksi berhasil! Anda telah membeli akun: " + akun.getNamaPengguna());
-                notifikasi.add("Anda telah membeli akun: " + akun.getNamaPengguna());
-
-                // Mengubah status akun game setelah pembelian
-                akun.setStatus("Tidak Tersedia");
-                return; // Pembelian berhasil
+            } else {
+                System.out.println("Saldo Anda tidak mencukupi.");
             }
-        }
-        System.out.println("Akun game tidak ditemukan atau sudah tidak tersedia.");
-    }
-
-    // Delay dengan parameter waktu
-    private static void delay(int milliseconds) {
-        try {
-            Thread.sleep(milliseconds); // Tunggu selama waktu yang ditentukan
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } else {
+            System.out.println("Akun Game tidak ditemukan.");
         }
     }
 
-
-    // Menampilkan notifikasi
     public static void tampilkanNotifikasi() {
         System.out.println("\n=== Notifikasi ===");
-        if (notifikasi.isEmpty()) {
-            System.out.println("Tidak ada notifikasi.");
-        } else {
-            for (String notif : notifikasi) {
-                System.out.println(notif);
+        for (String notifikasiItem : notifikasi) {
+            System.out.println("- " + notifikasiItem);
+        }
+    }
+
+    public static void tampilkanLoyaltyPoints() {
+        System.out.println("Loyalty Points Anda: " + loyaltyPoints.getPoints());
+    }
+
+    public static void verifikasiAkunGame(String namaPengguna) {
+        System.out.println("=== Verifikasi Akun Game ===");
+        System.out.print("Masukkan ID Akun Game yang ingin diverifikasi: ");
+        String idAkun = scanner.nextLine();
+
+        AkunGame akun = cariAkun(idAkun);
+        if (akun != null && akun.getStatus().equals("Tersedia untuk dijual")) {
+            System.out.print("Masukkan nama baru: ");
+            String namaBaru = scanner.nextLine();
+            System.out.print("Masukkan email baru: ");
+            String emailBaru = scanner.nextLine();
+            System.out.print("Masukkan password baru: ");
+            String passwordBaru = scanner.nextLine();
+
+            // Set the account status to "Terjual"
+            akun.setStatus("Terjual");
+            notifikasi.add("Akun Game " + akun.getNamaPengguna() + " telah terverifikasi.");
+            System.out.println("Verifikasi berhasil untuk Akun Game: " + akun.getNamaPengguna());
+
+            // Update user information
+            for (Pengguna pengguna : daftarPengguna) {
+                if (pengguna.getNama().equals(namaPengguna)) {
+                    pengguna.setNama(namaBaru);
+                    pengguna.setEmail(emailBaru);
+                    // Update password if necessary
+                    // (Not implemented, as password handling requires secure practices)
+                    break;
+                }
             }
+        } else {
+            System.out.println("Akun Game tidak ditemukan atau sudah terverifikasi.");
         }
     }
 
-    // Menunda program selama beberapa detik
-    public static void delay() {
-        try {
-            Thread.sleep(2000); // 2 detik
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+
+    public static void tampilkanRiwayatTransaksi() {
+        System.out.println("\n=== Riwayat Transaksi ===");
+        for (Transaksi transaksi : riwayatTransaksi) {
+            System.out.printf("Jenis: %s, Jumlah: %.2f%n", transaksi.getJenisTransaksi(), transaksi.getJumlah());
         }
     }
 
-    // Input string dengan prompt
-    public static String input(String prompt) {
-        System.out.print(prompt + ": ");
-        return scanner.nextLine();
+    public static void tampilkanRatingDanUlasan(String namaPengguna) {
+        System.out.println("\n=== Rating dan Ulasan ===");
+
+        // Allow user to add a rating and review
+        String rating = input("Masukkan rating (1-5): ");
+        String ulasan = input("Masukkan ulasan: ");
+        daftarRatingUlasan.add(new RatingUlasan(namaPengguna, rating, ulasan));
+        System.out.println("Ulasan berhasil ditambahkan.");
+
+        // Display all ratings and reviews
+        System.out.println("\n=== Semua Rating dan Ulasan ===");
+        for (RatingUlasan ratingUlasan : daftarRatingUlasan) {
+            System.out.printf("Nama: %s, Rating: %s, Ulasan: %s%n",
+                    ratingUlasan.getNamaPengguna(), ratingUlasan.getRating(), ratingUlasan.getUlasan());
+        }
     }
 
-    // Input kata sandi dengan prompt
-    public static String inputKataSandi(String prompt) {
-        System.out.print(prompt + ": ");
-        return scanner.nextLine();
-    }
-
-    // Menambahkan pengguna baru
+    // Helper methods
     public static boolean tambahPengguna(Pengguna pengguna) {
         for (Pengguna p : daftarPengguna) {
             if (p.getEmail().equals(pengguna.getEmail())) {
@@ -337,42 +328,57 @@ public class marketplace_akungame {
             }
         }
         daftarPengguna.add(pengguna);
-        return true; // Registrasi berhasil
+        return true;
     }
 
-    // Autentikasi pengguna
     public static boolean autentikasiPengguna(String email, String kataSandi) {
         for (Pengguna pengguna : daftarPengguna) {
             if (pengguna.getEmail().equals(email) && pengguna.getKataSandi().equals(kataSandi)) {
-                return true; // Autentikasi berhasil
+                return true;
             }
         }
-        return false; // Autentikasi gagal
+        return false;
     }
 
-    // Mengambil nama pengguna berdasarkan email
     public static String getNamaPengguna(String email) {
         for (Pengguna pengguna : daftarPengguna) {
             if (pengguna.getEmail().equals(email)) {
                 return pengguna.getNama();
             }
         }
-        return null; // Tidak ditemukan
+        return null;
+    }
+
+    public static AkunGame cariAkun(String idAkun) {
+        for (AkunGame akun : daftarAkunGame) {
+            if (akun.getIdAkun().equals(idAkun)) {
+                return akun;
+            }
+        }
+        return null;
+    }
+
+    public static String input(String label) {
+        System.out.print(label + ": ");
+        return scanner.nextLine();
+    }
+
+    public static String inputKataSandi(String label) {
+        System.out.print(label + ": ");
+        return scanner.nextLine();
     }
 }
 
-// Kelas Pengguna
+// Class definitions for Pengguna, AkunGame, Transaksi, RatingUlasan, and LoyaltyPoints
 class Pengguna {
     private String nama;
     private String email;
     private String kataSandi;
-    private double saldo;
 
     public Pengguna(String nama, String email, String kataSandi) {
         this.nama = nama;
         this.email = email;
         this.kataSandi = kataSandi;
-        this.saldo = 0; // Saldo awal adalah 0
     }
 
     public String getNama() {
@@ -394,34 +400,25 @@ class Pengguna {
     public String getKataSandi() {
         return kataSandi;
     }
-
-    public double getSaldo() {
-        return saldo;
-    }
-
-    public void topUp(double jumlah) {
-        saldo += jumlah;
-    }
 }
 
-// Kelas AkunGame
 class AkunGame {
     private String idAkun;
     private String namaPengguna;
     private int level;
-    private String hero;
+    private String informasi;
     private String skin;
     private String status;
-    private double harga; // Tambahkan harga
+    private double harga;
 
-    public AkunGame(String idAkun, String namaPengguna, int level, String hero, String skin, String status, double harga) {
+    public AkunGame(String idAkun, String namaPengguna, int level, String informasi, String skin, String status, double harga) {
         this.idAkun = idAkun;
         this.namaPengguna = namaPengguna;
         this.level = level;
-        this.hero = hero;
+        this.informasi = informasi;
         this.skin = skin;
         this.status = status;
-        this.harga = harga; // Inisialisasi harga
+        this.harga = harga;
     }
 
     public String getIdAkun() {
@@ -436,12 +433,8 @@ class AkunGame {
         return level;
     }
 
-    public String getHero() {
-        return hero;
-    }
-
-    public String getSkin() {
-        return skin;
+    public double getHarga() {
+        return harga;
     }
 
     public String getStatus() {
@@ -451,10 +444,60 @@ class AkunGame {
     public void setStatus(String status) {
         this.status = status;
     }
+}
 
-    public double getHarga() {
-        return harga; // Getter untuk harga
+class Transaksi {
+    private String namaPengguna;
+    private String jenisTransaksi;
+    private double jumlah;
+
+    public Transaksi(String namaPengguna, String jenisTransaksi, double jumlah) {
+        this.namaPengguna = namaPengguna;
+        this.jenisTransaksi = jenisTransaksi;
+        this.jumlah = jumlah;
+    }
+
+    public String getJenisTransaksi() {
+        return jenisTransaksi;
+    }
+
+    public double getJumlah() {
+        return jumlah;
     }
 }
 
-// tess andre
+class RatingUlasan {
+    private String namaPengguna;
+    private String rating;
+    private String ulasan;
+
+    public RatingUlasan(String namaPengguna, String rating, String ulasan) {
+        this.namaPengguna = namaPengguna;
+        this.rating = rating;
+        this.ulasan = ulasan;
+    }
+
+    public String getNamaPengguna() {
+        return namaPengguna;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public String getUlasan() {
+        return ulasan;
+    }
+}
+
+class LoyaltyPoints {
+    private int points;
+
+    public void tambahPoints(int jumlah) {
+        points += jumlah;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+}
